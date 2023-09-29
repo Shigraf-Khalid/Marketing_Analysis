@@ -1,0 +1,68 @@
+library(ggplot2)
+library(dplyr)
+
+
+campaign_data <- data.frame(
+  Date = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05")),
+  Clicks = c(100, 120, 110, 95, 105),
+  Conversions = c(10, 15, 12, 8, 9),
+  AdSpend = c(500, 550, 480, 490, 510)
+)
+
+KAG_conversion_data<- read.csv("C:/Users/HP/Downloads/KAG_conversion_data")
+
+
+
+campaign_data <- campaign_data %>%
+  mutate(
+    CTR = Clicks / sum(Clicks),
+    ConversionRate = Conversions / Clicks,
+    ROAS = Conversions / AdSpend
+  )
+
+
+plot1 <- ggplot(data = campaign_data, aes(x = Date)) +
+  geom_line(aes(y = Clicks, color = "Clicks"), size = 1) +
+  geom_line(aes(y = Conversions, color = "Conversions"), size = 1) +
+  scale_color_manual(values = c("Clicks" = "blue", "Conversions" = "green")) +
+  labs(title = "Clicks and Conversions Over Time by shigraf",
+       x = "Date",
+       y = "Count") +
+  theme_minimal()
+
+
+plot2 <- ggplot(data = campaign_data, aes(x = Date)) +
+  geom_line(aes(y = CTR, color = "CTR"), size = 1) +
+  geom_line(aes(y = ConversionRate, color = "Conversion Rate"), size = 1) +
+  scale_color_manual(values = c("CTR" = "orange", "Conversion Rate" = "purple")) +
+  labs(title = "CTR and Conversion Rate Over Time by shigraf",
+       x = "Date",
+       y = "Rate") +
+  theme_minimal()
+
+
+plot3 <- ggplot(data = campaign_data, aes(x = Date, y = ROAS)) +
+  geom_line(color = "blue", size = 1) +
+  labs(title = "Return on Ad Spend (ROAS) Over Time by shigraf",
+       x = "Date",
+       y = "ROAS") +
+  theme_minimal()
+
+
+summary(campaign_data)
+
+
+ROAS_mean <- mean(campaign_data$ROAS)
+CTR_mean <- mean(campaign_data$CTR)
+ConversionRate_mean <- mean(campaign_data$ConversionRate)
+
+cat("\nKey Performance Indicators (KPIs):\n")
+cat("Mean ROAS: ", ROAS_mean, "\n")
+cat("Mean CTR: ", CTR_mean, "\n")
+cat("Mean Conversion Rate: ", ConversionRate_mean, "\n")
+
+
+library(gridExtra)
+grid.arrange(plot1, plot2, plot3, ncol = 1)
+
+View(KAG_conversion_data)
