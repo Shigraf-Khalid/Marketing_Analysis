@@ -1,4 +1,4 @@
 # Marketing_Analysis
-The projects is all about the R language 
-<bd>
+The project is all about the R language 
+<br>
 Author = Shigraf Khalid
